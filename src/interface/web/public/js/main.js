@@ -1,49 +1,40 @@
-const form = document.getElementById('calc-form');
-const historyList = document.getElementById('history-list');
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('calc-form');
+    const resultBox = document.getElementById('result');
+    const errorBox = document.getElementById('error');
 
-async function fetchHistory() {
-    const res = await fetch('/history');
-    const data = await res.json();
+    if (!form || !resultBox || !errorBox) return;
 
-    historyList.innerHTML = '';
-    data.forEach((item) => {
-        const li = document.createElement('li');
-        li.textContent = `${item.operand1} ${item.operator} ${item.operand2} = ${item.result}`;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-        const reuseBtn = document.createElement('button');
-        reuseBtn.textContent = '↺ Réutiliser';
-        reuseBtn.onclick = async () => {
-            const res = await fetch('/history/clone', {
+        resultBox.textContent = '';
+        errorBox.textContent = '';
+
+        const operand1 = parseFloat(document.getElementById('operand1').value);
+        const operand2 = parseFloat(document.getElementById('operand2').value);
+        const operator = document.getElementById('operator').value;
+
+        try {
+            const response = await fetch('/calculate', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    operand1: item.operand1,
-                    operand2: item.operand2,
-                    operator: item.operator,
-                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ operand1, operand2, operator }),
             });
-            await fetchHistory();
-        };
 
-        li.appendChild(reuseBtn);
-        historyList.appendChild(li);
+            const data = await response.json();
+
+            if (!response.ok) {
+                errorBox.textContent = data.error || 'Une erreur est survenue.';
+                return;
+            }
+
+            resultBox.textContent = `Résultat : ${data.result}`;
+            form.reset();
+        } catch (err) {
+            errorBox.textContent = 'Erreur réseau ou serveur.';
+        }
     });
-}
-
-form.onsubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
-    data.operand1 = Number(data.operand1);
-    data.operand2 = Number(data.operand2);
-
-    await fetch('/calculate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-    });
-    await fetchHistory();
-    form.reset();
-};
-
-window.onload = fetchHistory;
+});
