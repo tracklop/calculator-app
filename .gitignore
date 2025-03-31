@@ -1,0 +1,17 @@
+# Environment and system files
+**/.env
+.DS_Store
+
+# Node dependencies and build output
+node_modules/
+dist/
+coverage/
+
+# npm logs
+npm-debug.log*
+
+# Temporary or backup files
+*.copy*
+*.temp*
+*.save*
+*.log*

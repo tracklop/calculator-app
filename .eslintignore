@@ -1,0 +1,4 @@
+node_modules/
+dist/
+src/interface/web/public/
+src/interface/web/views/
