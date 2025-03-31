@@ -1,6 +1,9 @@
-import 'reflect-metadata';
+import express from 'express';
+import calculationRoutes from '@/infrastructure/routes/calculation.routes';
 
-// ⚠️ Ce fichier sera étendu plus tard pour lancer l'application (Express, serveur, DI...)
-// Pour l'instant il sert de point d'entrée pour vérifier que la config fonctionne
+const app = express();
 
-console.log('Calculator App is running...');
+app.use(express.json());
+app.use('/api', calculationRoutes);
+
+export default app;
