@@ -23,11 +23,11 @@ describe('CalculatorService', () => {
         expect(service.calculate(10, 2, '/')).toBe(5);
     });
 
-    it('should throw an error on division by zero', () => {
+    it('should throw error on division by zero', () => {
         expect(() => service.calculate(5, 0, '/')).toThrow('Division by zero is not allowed.');
     });
 
-    it('should throw an error on invalid operator', () => {
+    it('should throw error on invalid operator', () => {
         // @ts-expect-error intentional bad input
         expect(() => service.calculate(1, 1, '%')).toThrow('Invalid operator: %');
     });
