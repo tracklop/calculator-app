@@ -1,5 +1,5 @@
 import { ContainerModule, interfaces } from 'inversify';
-import { TYPES } from '@/config/types';
+import TYPES from '@/config/types';
 import { UseCaseProxy } from './usecases-proxy';
 
 // ...
