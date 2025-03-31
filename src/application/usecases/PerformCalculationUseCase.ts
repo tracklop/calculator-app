@@ -1,6 +1,6 @@
 import TYPES from '@/config/types';
 import { Operator, Calculation } from '@/domain/entities/Calculation';
-import { ICalculatorService } from '@/domain/services/ICalculatorService';
+import type { ICalculatorService } from '@/domain/services/ICalculatorService';
 import { injectable, inject } from 'inversify';
 
 @injectable()
