@@ -13,7 +13,7 @@ describe('CalculationController', () => {
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const controller = new CalculationController(useCaseProxy as any);
+    const controller = new CalculationController(useCaseProxy as any, useCaseProxy as any);
 
     const mockRes = (): Response => {
         const res = {} as Response;

@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { ENV } from '@/config/env';
-import express from 'express';
+import express, { Router } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -8,8 +8,7 @@ import bodyParser from 'body-parser';
 
 import '@/config/inversify.config';
 
-import calculationRoutes from '@/infrastructure/routes/calculation.routes';
-import historyRoutes from '@/infrastructure/routes/history.routes';
+import routes from '@/infrastructure/routes/index.routes';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -25,7 +24,16 @@ app.set('views', path.resolve(__dirname, 'interface/web/views'));
 
 app.use(express.static(path.resolve(__dirname, 'interface/web/public')));
 
-app.use('/', calculationRoutes, historyRoutes);
+routes.forEach((router: Router & { routerName?: string }) => {
+    app.use(router);
+    let routesLog = '';
+    router.stack.forEach((layer) => {
+        if (layer.route) {
+            routesLog += `  - ${layer.route.path}\n`;
+        }
+    });
+    console.log(`Routes montées depuis ${router.routerName || 'un fichier'}\n${routesLog}`);
+});
 
 app.get('/', (_req, res) => {
     res.render('pages/index');

@@ -10,7 +10,6 @@
         "start:prod": "NODE_OPTIONS='--experimental-specifier-resolution=node' pm2-runtime dist/app.js",
         "start:dev": "nodemon --loader ./ts-esm-loader.mjs src/app.ts --extensions \".ts,.js\" --ignore src/interface/web/public/js/*.js",
         "build": "npx tsc && npx babel dist --out-dir dist --copy-files --source-maps inline && rsync -av --exclude='*.ts' --exclude='*.js' src/ dist/",
-        "migrate": "npx sequelize-cli db:migrate",
         "test": "jest",
         "coverage": "jest --coverage",
         "ver:patch": "npm version patch --no-git-tag-version",

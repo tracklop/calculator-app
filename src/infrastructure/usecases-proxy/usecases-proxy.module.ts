@@ -5,10 +5,10 @@ import { UseCaseProxy } from './usecases-proxy';
 import { PerformCalculationUseCase } from '@/application/usecases/PerformCalculationUseCase';
 import { GetCalculationHistoryUseCase } from '@/application/usecases/history/GetCalculationHistoryUseCase';
 import { SaveCalculationToHistoryUseCase } from '@/application/usecases/history/SaveCalculationToHistoryUseCase';
+import { CloneAndRecalculateUseCase } from '@/application/usecases/history/CloneAndRecalculateUseCase';
 
 import { ICalculatorService } from '@/domain/services/ICalculatorService';
 import { ICalculationHistoryService } from '@/domain/services/ICalculationHistoryService';
-import { CloneAndRecalculateUseCase } from '@/application/usecases/history/CloneAndRecalculateUseCase';
 
 const UseCasesProxyModule = new ContainerModule((bind: interfaces.Bind) => {
     bind<UseCaseProxy<PerformCalculationUseCase>>(TYPES.PerformCalculationUseCaseProxy).toDynamicValue(
@@ -27,10 +27,12 @@ const UseCasesProxyModule = new ContainerModule((bind: interfaces.Bind) => {
     );
 
     bind<UseCaseProxy<SaveCalculationToHistoryUseCase>>(TYPES.SaveCalculationToHistoryUseCaseProxy).toDynamicValue(
-        (context) => {
-            const historyService = context.container.get<ICalculationHistoryService>(TYPES.ICalculationHistoryService);
-            return new UseCaseProxy(new SaveCalculationToHistoryUseCase(historyService));
-        },
+        (context) =>
+            new UseCaseProxy(
+                new SaveCalculationToHistoryUseCase(
+                    context.container.get<ICalculationHistoryService>(TYPES.ICalculationHistoryService),
+                ),
+            ),
     );
 
     bind<UseCaseProxy<CloneAndRecalculateUseCase>>(TYPES.CloneAndRecalculateUseCaseProxy).toDynamicValue((context) => {
